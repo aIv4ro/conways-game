@@ -1,53 +1,60 @@
-import { type CGMatrix } from '../types/types'
+import { type Size, type CGMatrix, type CellPosition } from '../types/types'
+import { getMatrixSize } from './get-matrix-size'
 
 export function getNextFrame (cells: CGMatrix): CGMatrix {
-  return cells.map((cell, index) => {
-    const neighbors = getNeighbors(index)
-    const aliveNeighbors = neighbors.filter((neighbor) => cells[neighbor] === 1).length
-    if (cell === 1) {
-      if (aliveNeighbors < 2 || aliveNeighbors > 3) {
-        return 0
+  const size = getMatrixSize(cells)
+  return cells.map((row, rowIndex) => {
+    return row.map((cell, cellIndex) => {
+      const cellPosition = { row: rowIndex, col: cellIndex }
+      const neighbors = getNeighbors(cellPosition, size)
+      const aliveNeighbors = neighbors.filter((neighborPos) => cells[neighborPos.row][neighborPos.col] === 1).length
+      if (cell === 1) {
+        if (aliveNeighbors < 2 || aliveNeighbors > 3) {
+          return 0
+        }
+        if (aliveNeighbors === 2 || aliveNeighbors === 3) {
+          return 1
+        }
       }
-      if (aliveNeighbors === 2 || aliveNeighbors === 3) {
+      if (cell === 0 && aliveNeighbors === 3) {
         return 1
       }
-    }
-    if (cell === 0 && aliveNeighbors === 3) {
-      return 1
-    }
-    return cell
+      return cell
+    })
   })
 }
 
-function getNeighbors (index: number) {
+function getNeighbors (position: CellPosition, size: Size): CellPosition[] {
   const neighbors = []
-  const isLeftEdge = index % 25 === 0
-  const isRightEdge = index % 25 === 24
-  const isTopEdge = index < 25
-  const isBottomEdge = index >= 600
-  if (!isLeftEdge) {
-    neighbors.push(index - 1)
+  const { row, col } = position
+  const { width, height } = size
+  const top = row - 1
+  const bottom = row + 1
+  const left = col - 1
+  const right = col + 1
+  if (top >= 0) {
+    neighbors.push({ row: top, col })
   }
-  if (!isRightEdge) {
-    neighbors.push(index + 1)
+  if (bottom < height) {
+    neighbors.push({ row: bottom, col })
   }
-  if (!isTopEdge) {
-    neighbors.push(index - 25)
+  if (left >= 0) {
+    neighbors.push({ row, col: left })
   }
-  if (!isBottomEdge) {
-    neighbors.push(index + 25)
+  if (right < width) {
+    neighbors.push({ row, col: right })
   }
-  if (!isLeftEdge && !isTopEdge) {
-    neighbors.push(index - 26)
+  if (top >= 0 && left >= 0) {
+    neighbors.push({ row: top, col: left })
   }
-  if (!isRightEdge && !isTopEdge) {
-    neighbors.push(index - 24)
+  if (top >= 0 && right < width) {
+    neighbors.push({ row: top, col: right })
   }
-  if (!isLeftEdge && !isBottomEdge) {
-    neighbors.push(index + 24)
+  if (bottom < height && left >= 0) {
+    neighbors.push({ row: bottom, col: left })
   }
-  if (!isRightEdge && !isBottomEdge) {
-    neighbors.push(index + 26)
+  if (bottom < height && right < width) {
+    neighbors.push({ row: bottom, col: right })
   }
   return neighbors
 }

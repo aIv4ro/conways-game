@@ -16,7 +16,8 @@ function App () {
         onStop={stop}
         onResume={resume}
         isStopped={isStopped} />
-      <GameBoard cells={cells} />
+      <GameBoard
+        cells={cells} />
     </>
   )
 }

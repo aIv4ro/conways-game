@@ -1,4 +1,5 @@
 import { type CGMatrix } from '../types/types'
+import { getMatrixSize } from '../utils/get-matrix-size'
 import { Cell } from './cell'
 
 export function GameBoard ({
@@ -6,10 +7,16 @@ export function GameBoard ({
 }: {
   cells: CGMatrix
 }) {
+  const { height, width } = getMatrixSize(cells)
   return (
-    <div className='grid grid-cols-[repeat(25,22px)] justify-center'>
-      {cells.map((cell, index) => {
-        return <Cell key={index} cell={cell} />
+    <div style={{
+      gridTemplateRows: `repeat(${height},22px)`,
+      gridTemplateColumns: `repeat(${width},22px`
+    }} className='grid justify-center'>
+      {cells.map((row) => {
+        return row.map((cell, cellIndex) => {
+          return <Cell key={cellIndex} cell={cell} />
+        })
       })}
     </div>
   )

@@ -3,17 +3,20 @@ import { getNextFrame } from '../utils/get-next-frame'
 import { useInterval } from './use-interval'
 import { generateCells } from '../utils/generate-cells'
 import { type CGMatrix } from '../types/types'
+import { getMatrixSize } from '../utils/get-matrix-size'
 
 interface UseConwaysGame {
   initialCells?: CGMatrix
   interval?: number
 }
 
+const defaultCells = generateCells({ width: 50, height: 50 })
+
 export function useConwaysGame ({
-  initialCells = generateCells(),
+  initialCells,
   interval = 200
 }: UseConwaysGame = {}) {
-  const [cells, setCells] = useState(initialCells)
+  const [cells, setCells] = useState(initialCells ?? defaultCells)
   const [isStopped, setIsStopped] = useState(false)
 
   function handleFrame () {
@@ -27,7 +30,8 @@ export function useConwaysGame ({
   )
 
   function reset () {
-    setCells(generateCells())
+    const size = getMatrixSize(cells)
+    setCells(generateCells(size))
   }
 
   function stop () {
