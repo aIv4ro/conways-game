@@ -1,4 +1,6 @@
-export function getNextFrame (cells: Array<0 | 1>): Array<0 | 1> {
+import { type CGMatrix } from '../types/types'
+
+export function getNextFrame (cells: CGMatrix): CGMatrix {
   return cells.map((cell, index) => {
     const neighbors = getNeighbors(index)
     const aliveNeighbors = neighbors.filter((neighbor) => cells[neighbor] === 1).length

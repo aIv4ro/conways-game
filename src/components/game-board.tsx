@@ -1,9 +1,10 @@
+import { type CGMatrix } from '../types/types'
 import { Cell } from './cell'
 
 export function GameBoard ({
   cells
 }: {
-  cells: Array<0 | 1>
+  cells: CGMatrix
 }) {
   return (
     <div className='grid grid-cols-[repeat(25,22px)] justify-center'>

@@ -2,9 +2,10 @@ import { useState } from 'react'
 import { getNextFrame } from '../utils/get-next-frame'
 import { useInterval } from './use-interval'
 import { generateCells } from '../utils/generate-cells'
+import { type CGMatrix } from '../types/types'
 
 interface UseConwaysGame {
-  initialCells?: Array<0 | 1>
+  initialCells?: CGMatrix
   interval?: number
 }
 

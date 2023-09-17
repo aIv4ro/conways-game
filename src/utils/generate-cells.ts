@@ -1,5 +1,6 @@
+import { type CGMatrix } from '../types/types'
 import { getRandomBit } from './get-random-num'
 
-export function generateCells (): Array<0 | 1> {
+export function generateCells (): CGMatrix {
   return Array(625).fill(0).map(getRandomBit)
 }
